@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Time Calculator</title>
+    <style>
+                body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(270deg, #ff7e5f, #feb47b, #ff7e5f);
+            background-size: 600% 600%;
+            animation: gradientBG 10s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        input[type="time"] {
+            font-size: 18px;
+            padding: 5px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff7e5f;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #feb47b;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Office Time Calculator</h1>
+        <form id="timeForm">
+            <label for="inTime">In Time:</label>
+            <input type="time" id="inTime" required>
+
+            <label for="breakFrom">Break From:</label>
+            <input type="time" id="breakFrom" required>
+
+            <label for="breakTo">Break To:</label>
+            <input type="time" id="breakTo" required> <br>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        document.getElementById('timeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const inTime = document.getElementById('inTime').value;
+            const breakFrom = document.getElementById('breakFrom').value;
+            const breakTo = document.getElementById('breakTo').value;
+
+            const inTimeDate = new Date(`1970-01-01T${inTime}:00`);
+            const breakFromDate = new Date(`1970-01-01T${breakFrom}:00`);
+            const breakToDate = new Date(`1970-01-01T${breakTo}:00`);
+
+            const breakDuration = (breakToDate - breakFromDate) / (1000 * 60 * 60); // in hours
+
+            const totalWorkingHours = 8; // Standard working hours
+            const totalTimeToSpend = totalWorkingHours + breakDuration;
+
+            const leaveTime = new Date(inTimeDate.getTime() + totalTimeToSpend * 60 * 60 * 1000);
+
+            // Convert leave time to 12-hour format with AM/PM
+            const leaveTimeString = leaveTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+            document.getElementById('result').innerText = `You can leave at: ${leaveTimeString}`;
+        });
+    </script>
+</body>
+</html>
